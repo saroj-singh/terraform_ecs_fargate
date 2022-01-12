@@ -2,9 +2,9 @@
 
 data "template_file" "myapp-task-definition-template" {
   template = file("templates/app.json.tpl")
-  vars = {
-    REPOSITORY_URL = replace(aws_ecr_repository.myapp.repository_url, "https://", "")
-  }
+  # vars = {
+  #   REPOSITORY_URL = replace(aws_ecr_repository.myapp.repository_url, "https://", "")
+  # }
 }
 
 resource "aws_ecs_task_definition" "myapp-task-definition" {
@@ -16,36 +16,36 @@ resource "aws_ecs_task_definition" "myapp-task-definition" {
   container_definitions = data.template_file.myapp-task-definition-template.rendered
 }
 
-resource "aws_elb" "myapp-elb" {
-  name = "myapp-elb"
+# resource "aws_elb" "myapp-elb" {
+#   name = "myapp-elb"
 
-  listener {
-    instance_port     = 80
-    instance_protocol = "http"
-    lb_port           = 80
-    lb_protocol       = "http"
-  }
+#   listener {
+#     instance_port     = 80
+#     instance_protocol = "http"
+#     lb_port           = 80
+#     lb_protocol       = "http"
+#   }
 
-  health_check {
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
-    timeout             = 30
-    target              = "HTTP:80/"
-    interval            = 60
-  }
+#   health_check {
+#     healthy_threshold   = 3
+#     unhealthy_threshold = 3
+#     timeout             = 30
+#     target              = "HTTP:80/"
+#     interval            = 60
+#   }
 
-  cross_zone_load_balancing   = true
-  idle_timeout                = 400
-  connection_draining         = true
-  connection_draining_timeout = 400
+#   cross_zone_load_balancing   = true
+#   idle_timeout                = 400
+#   connection_draining         = true
+#   connection_draining_timeout = 400
 
-  subnets         = [aws_subnet.main-public-1.id, aws_subnet.main-public-2.id]
-  security_groups = [aws_security_group.myapp-elb-securitygroup.id]
+#   subnets         = [aws_subnet.main-public-1.id, aws_subnet.main-public-2.id]
+#   security_groups = [aws_security_group.myapp-elb-securitygroup.id]
 
-  tags = {
-    Name = "myapp-elb"
-  }
-}
+#   tags = {
+#     Name = "myapp-elb"
+#   }
+# }
 
 resource "aws_ecs_service" "myapp-service" {
   name            = "myapp"
@@ -55,7 +55,7 @@ resource "aws_ecs_service" "myapp-service" {
   launch_type = "FARGATE" 
   network_configuration { 
     subnets         = [aws_subnet.main-public-1.id, aws_subnet.main-public-2.id] 
-    security_groups = [aws_security_group.myapp-elb-securitygroup.id] 
+    security_groups = [aws_security_group.ecs-securitygroup.id] 
     assign_public_ip = true
     
   }
