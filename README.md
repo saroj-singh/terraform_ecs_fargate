@@ -11,3 +11,10 @@ Just make sure your local credentials are of admin, or just someone who has acce
 There are some junk files incase you want to use ec2, it is a sort of starter kit.
 
 ******** EVERYTHING IS DEPLOYED ON US-WEST-2(OREGON) ********
+
+
+# Sets up Terraform to run
+$ terraform init
+
+# Executes the Terraform run
+$ terraform apply
