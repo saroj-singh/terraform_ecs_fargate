@@ -1,4 +1,3 @@
-# output "elb" {
-#   value = aws_elb.myapp-elb.dns_name
-# }
-
+output "alb" {
+    value = aws_lb.sks.dns_name
+}

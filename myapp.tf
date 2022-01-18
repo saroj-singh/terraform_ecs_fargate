@@ -63,11 +63,11 @@ resource "aws_ecs_service" "myapp-service" {
   # iam_role        = aws_iam_role.ecs-service-role.arn
   # depends_on      = [aws_iam_policy_attachment.ecs-service-attach1]
 
-  # load_balancer {
-  #   elb_name       = aws_elb.myapp-elb.name
-  #   container_name = "myapp"
-  #   container_port = 80
-  # }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.ip-example.arn
+    container_name = "myapp"
+    container_port = 80
+  }
   lifecycle {
     ignore_changes = [task_definition]
   }
